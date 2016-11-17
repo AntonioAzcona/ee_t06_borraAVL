@@ -7,11 +7,11 @@ package MiPaquete;
 
 /**
  *
- * @author Antonio
+ * @author Antonio Azcona González
  */
-public class ArbolAVL<T extends Comparable<T>> extends Arbol<T>{
+public class ArbolAVL<T extends Comparable<T>> extends Arbol<T> {
     
-     public NodoAVL getRaizAVL(){
+    public NodoAVL getRaizAVL(){
         return (NodoAVL) raiz;
     }
     
@@ -275,211 +275,159 @@ public class ArbolAVL<T extends Comparable<T>> extends Arbol<T>{
                     }else{
                         nodo1.setFe(0);
                     }
-                    raiz = nodo2;                    
+                    raiz = nodo2;
+                    
                 }
-                castAVL(raiz).setFe(0);        
+                
+                castAVL(raiz).setFe(0);
+        
             }
         }
         return 0;
     }
-    /*public void insertabalanceado(NodoAVL<T> nodo, boolean bo, int infor){
-        NodoAVL<T> otro, nodo1, nodo2;
-        if(nodo != null){//1
-            if(infor < nodo.getFe()){//1.1
-                insertabalanceado(nodo.getIzq(), bo, infor);
-                if(bo == true){//1.1.1
-                    switch(nodo.getFe()){//1.1.1.1
-                        case 1:
-                            nodo.setFe(0);
-                            bo = false;
-                            break;
-                        case 0:
+    
+    public void eliminabalanceado(NodoAVL<T> nodo, boolean bo, T infor){
+        NodoAVL<T> otro;
+        if(nodo != null){
+            if(infor.compareTo(nodo.getDato()) < 0){
+                eliminabalanceado(nodo.getIzq(), bo, infor);
+               //restructura1(nodo, bo);
+            }else{
+                if(infor.compareTo(nodo.getDato()) > 0){
+                   eliminabalanceado(nodo.getDer(), bo, infor);
+                   //restructura2(nodo, bo);
+                }else{
+                    otro = nodo;
+                    if(otro.getDer() == null){
+                        nodo = otro.getIzq();
+                    }else{
+                        if(otro.getIzq() == null){
+                            nodo = otro.getDer();
+                        }else{
+                            borra(otro.getIzq(), otro, bo);
+                            restructura1(nodo, bo);
+                            //quita(otro);
+                        }//fin
+                    }//fin
+                }//fin
+            }//fin
+        }else{
+            System.out.println("El nodo no se encuentra en el arbol");
+        }//fin
+    }
+    
+    public void restructura1(NodoAVL<T> nodo, boolean bo){
+        NodoAVL<T> nodo1, nodo2;
+        if(bo == true){
+            switch(nodo.getFe()){
+                case -1:
+                    nodo.setFe(0);
+                    break;
+                case 0:
+                    nodo.setFe(1);
+                    bo = false;
+                    break;
+                case 1:
+                    nodo1 = nodo.getDer();
+                    if(nodo1.getFe() == 0){//Rotacion DD
+                        nodo.setDer(nodo1.getIzq());
+                        nodo1.setIzq(nodo);
+                        switch(nodo1.getFe()){
+                            case 0:
+                                nodo.setFe(1);
+                                nodo1.setFe(-1);
+                                bo = false;
+                                break;
+                            case 1:
+                                nodo.setFe(0);
+                                nodo1.setFe(0);
+                                break;
+                        }//fin
+                        nodo = nodo1;
+                        //Termina la rotacion DD
+                    }else{//Rotacion DI
+                        nodo2 = nodo1.getIzq();
+                        nodo.setDer(nodo2.getIzq());
+                        nodo2.setIzq(nodo);
+                        nodo1.setIzq(nodo2.getDer());
+                        nodo2.setDer(nodo1);
+                        if(nodo2.getFe() == 1){
                             nodo.setFe(-1);
-                            break;
-                        case -1:
-                            nodo1 = nodo.getIzq();
-                            break;
-                    }
-                        Esta mal esta parte del libro 
-                        if(nodo1.getFe() <= 0){//Rotacion II 1.1.1.1.
+                        }else{
+                            nodo.setFe(0);
+                        }//fin
+                        if(nodo.getFe() == -1){
+                            nodo1.setFe(1);
+                        }else{
+                            nodo1.setFe(0);
+                        }//fin
+                        nodo = nodo2;
+                        nodo2.setFe(0);
+                    }//Termina la rotacion DI
+                    break;
+            }//fin
+        }//fin
+    }//fin
+    
+    public void restructura2(NodoAVL<T> nodo, boolean bo){
+        NodoAVL<T> nodo1, nodo2;
+        if(bo == true){
+            switch(nodo.getFe()){
+                case 1:
+                    nodo.setFe(0);
+                    break;
+                case 0:
+                    nodo.setFe(-1);
+                    bo = false;
+                    break;
+                case -1://restsructuracion del Arbol
+                    nodo1 = nodo.getIzq();
+                    if(nodo1.getFe() <= 0){//Rotacion II
                         nodo.setIzq(nodo1.getDer());
                         nodo1.setDer(nodo);
-                        nodo.setFe(0);
+                        switch(nodo1.getFe()){
+                            case 0:
+                                nodo.setFe(-1);
+                                nodo1.setFe(1);
+                                bo = false;
+                                break;
+                            case -1:
+                                nodo.setFe(0);
+                                nodo1.setFe(0);
+                                break;
+                        }//fin
                         nodo = nodo1;
-                        //Termina la rotacion II
-                    }else{//Rotacion ID
+                        //termina la rotacion II
+                    }else{//rotacion ID
                         nodo2 = nodo1.getDer();
                         nodo.setIzq(nodo2.getDer());
                         nodo2.setDer(nodo);
                         nodo1.setDer(nodo2.getIzq());
                         nodo2.setIzq(nodo1);
-                    }
-                }
-            }
-        }
-    }*/
-    public void eliminabalanceado(NodoAVL<T> nodo, boolean bo, int infor){
-        NodoAVL<T> otro;//, aux, aux1;
-        if(nodo != null){//1.
-            if(infor < nodo.getFe()){//1.1
-                eliminabalanceado(nodo.getIzq(), bo, infor);
-                restructura1(nodo, bo);
-            }else{
-                if(infor > nodo.getFe()){//1.1.1
-                    eliminabalanceado(nodo.getDer(), bo, infor);
-                    restructura2(nodo, bo);
-                }else{
-                    otro = nodo;
-                    bo = true;/**/
-                    if(otro.getDer() == null){//1.1.1.1
-                        nodo = otro.getIzq();
-                    }else{
-                        if(otro.getIzq() == null){//1.1.1.1.1
-                            nodo = otro.getDer();
+                        if(nodo2.getFe() == -1){
+                            nodo.setFe(1);
                         }else{
-                            /*aux = nodo.getIzq();
-                            bo = false;
-                            while(aux.getDer() != null){
-                                aux1 = aux;
-                                aux = aux.getDer();
-                                bo = true;
-                            }
-                            nodo.setFe(aux.getFe());
-                            otro = aux;
-                            if(bo == true){
-                                aux1.setDer(aux.getIzq());
-                            }else{
-                                nodo.setIzq(aux.getIzq());
-                            }
-                            restructura1(nodo.getIzq(), bo);*/
-                            borra(otro.getIzq(), otro, bo);
-                            restructura1(nodo, bo);
-                            //Error en el pseudocodigo  quita(otro)
-                        }
-                    }
-                    //Quitar(otro);
-                }
-            }
-        }else{
-            System.out.println("El nodo no se encuentra en el arbol");
-        }    
-    }
-    public void restructura1(NodoAVL<T> nodo, boolean bo){
-        NodoAVL<T> nodo1, nodo2;
-        if(bo == true){
-            switch(nodo.getFe())
-            {
-                case -1:
-                nodo.setFe(0);
-                break;
-                case 0:
-                nodo.setFe(1);
-                bo = false;
-                break;
-                case 1://Restructuacion del árbol
-                nodo1 = nodo.getDer();
-                if(nodo1.getFe() == 0){//Rotacion DD
-                    nodo.setDer(nodo1.getIzq());
-                    nodo1.setIzq(nodo);
-                    switch(nodo1.getFe()){
-                        case 0:
-                        nodo.setFe(1);
-                        nodo1.setFe(-1);
-                        bo = false;
-                        break;
-                        case 1:
-                        nodo.setFe(0);
-                        nodo1.setFe(0);
-                        break;
-                    }//fin
-                    nodo = nodo1;
-                    //Termina la rotacion DD
-                 break;
-                }else{//Rotacion DI
-                    nodo2 = nodo1.getIzq();
-                    nodo.setDer(nodo2.getIzq());
-                    nodo2.setIzq(nodo);
-                    nodo1.setIzq(nodo2.getDer());
-                    nodo2.setDer(nodo1);
-                  if(nodo2.getFe() == 1){
-                      nodo.setFe(-1);
-                  }else{
-                      nodo.setFe(0);
-                  }//fin
-                  if(nodo.getFe() == -1){
-                      nodo1.setFe(1);
-                  }else{
-                      nodo1.setFe(0);
-                  }//fin
-                  nodo = nodo2;
-                  nodo2.setFe(0);
-                }//Termina la rotacion DI
-            }
-        }
-    }
-    
-    public void restructura2(NodoAVL<T> nodo, boolean bo){
-       NodoAVL<T> nodo1, nodo2;  
-       if(bo == true){
-           switch(nodo.getFe()){
-               case 1:
-               nodo.setFe(0);
-               break;
-               case 0:
-               nodo.setFe(-1);
-               bo = false;
-               break;
-               case -1://Restructuracion del arbol
-               nodo1 = nodo.getIzq();
-               if(nodo1.getFe() <= 0){//Rotacion II
-                   nodo.setIzq(nodo1.getDer());
-                   nodo1.setDer(nodo);
-                   switch(nodo1.getFe()){
-                       case 0:
-                       nodo.setFe(-1);
-                       nodo1.setFe(1);
-                       bo = false;
-                       break;
-                       case -1:
-                       nodo.setFe(0);
-                       nodo1.setFe(0);
-                       break;
-                   }
-                   nodo = nodo1;
-                   //Termina la rotacion II
-                   break;
-               }else{//Rotacion ID
-                   nodo2 = nodo1.getDer();
-                   nodo.setIzq(nodo2.getDer());
-                   nodo2.setDer(nodo);
-                   nodo1.setDer(nodo2.getIzq());
-                   nodo2.setIzq(nodo1);
-                   if(nodo2.getFe() == -1){
-                       nodo.setFe(1);
-                   }else{
-                       nodo.setFe(0);
-                   }//*
-                   if(nodo2.getFe() == 1){
-                       nodo1.setFe(-1);
-                   }else{
-                       nodo1.setFe(0);
-                   }//fin
-                   nodo = nodo2;
-                   nodo2.setFe(0);
-                   //Termina la rotacion ID
-               }//fin
-           }//fin
-       }//fin
-    }
+                            nodo.setFe(0);
+                        }//fin
+                        if(nodo2.getFe() == 1){
+                            nodo1.setFe(-1);
+                        }else{
+                            nodo1.setFe(0);
+                        }//fin
+                        nodo = nodo2;
+                        nodo2.setFe(0);
+                    }//Termina la rotacion ID
+                    break;
+            }//fin
+        }//fin
+    }//fin
     
     public void borra(NodoAVL<T> aux, NodoAVL<T> otro, boolean bo){
         if(aux.getDer() != null){
             borra(aux.getDer(), otro, bo);
             restructura2(aux, bo);
-        }else{
-            otro.setFe(aux.getFe());
             aux = aux.getIzq();
             bo = true;
-        }    
+        }//fin
     }
 }
